@@ -30,16 +30,16 @@
         </ListView>
 
         <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right">
-            <ComboBox ItemsSource="{Binding ExportOptions}" 
-                      SelectedItem="{Binding SelectedExportOption}"
-                      VerticalAlignment="Center"
-                      Width="150"/>
+            <ComboBox ItemsSource="{Binding EventTypes}"
+                      SelectedItem="{Binding SelectedEventType}"
+                      VerticalContentAlignment="Center"
+                      Margin="10,0,0,0"
+                      Width="110"/>
 
             <Button Content="Export Events" 
                     Command="{Binding ExportCommand}" 
                     Margin="10,0,0,0" 
                     Padding="10,5"/>
         </StackPanel>
-
     </Grid>
 </Window>
