@@ -1,4 +1,5 @@
 ﻿using ChangeHound.Commands;
+using ChangeHound.Common;
 using ChangeHound.Models;
 using ChangeHound.Services;
 using Microsoft.Win32;
@@ -9,7 +10,7 @@ using System.Windows;
 using System.Windows.Input;
 
 namespace ChangeHound.ViewModels {
-    class MainViewModel {
+    class MainViewModel : ViewModelBase {
         #region Fields
         public ObservableCollection<FileChange> FileChanges { get; } = new ObservableCollection<FileChange>();
         private readonly FileSystemMonitorService _monitorService;
