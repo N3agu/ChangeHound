@@ -8,7 +8,8 @@
         xmlns:vm="clr-namespace:ChangeHound.ViewModels"
         mc:Ignorable="d"
         Title="ChangeHound" Height="450" Width="800"
-        ui:WindowHelper.UseModernWindowStyle="True">
+        ui:WindowHelper.UseModernWindowStyle="True"
+        WindowStartupLocation="CenterScreen">
     <Window.DataContext>
         <vm:MainViewModel />
     </Window.DataContext>
