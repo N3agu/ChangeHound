@@ -14,7 +14,12 @@
         <vm:MainViewModel />
     </Window.DataContext>
     <Grid>
-        <ListView ItemsSource="{Binding FileChanges}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <ListView Grid.Row="1" ItemsSource="{Binding FileChanges}">
             <ListView.View>
                 <GridView>
                     <GridViewColumn Header="Event" DisplayMemberBinding="{Binding EventType}" Width="100"/>
