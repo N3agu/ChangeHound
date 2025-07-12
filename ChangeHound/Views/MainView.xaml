@@ -11,7 +11,7 @@
         ui:WindowHelper.UseModernWindowStyle="True"
         WindowStartupLocation="CenterScreen">
     <Window.DataContext>
-        <vm:MainViewModel />
+        <vm:MonitorViewModel />
     </Window.DataContext>
     <Grid Margin="10">
         <Grid.RowDefinitions>
