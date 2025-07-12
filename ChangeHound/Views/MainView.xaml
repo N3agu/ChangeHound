@@ -15,21 +15,36 @@
     </Window.DataContext>
     <Grid Margin="10">
         <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
-
-        <ListView Grid.Row="0" ItemsSource="{Binding FileChanges}" Margin="0,0,0,10">
+        <!-- Filter UI -->
+        <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,10">
+            <TextBox Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"
+                     Width="300"
+                     VerticalContentAlignment="Center"
+                     Padding="5,0"/>
+            <ComboBox ItemsSource="{Binding EventTypes}"
+                      SelectedItem="{Binding SelectedFilterType}"
+                      VerticalContentAlignment="Center"
+                      Margin="10,0,0,0"
+                      Width="110"/>
+        </StackPanel>
+        
+        <!-- Event List UI -->
+        <ListView Grid.Row="1" ItemsSource="{Binding FilteredFileChanges}" Margin="0,0,0,10">
             <ListView.View>
                 <GridView>
                     <GridViewColumn Header="Event" DisplayMemberBinding="{Binding EventType}" Width="100"/>
                     <GridViewColumn Header="File Path" DisplayMemberBinding="{Binding FilePath}" Width="Auto"/>
-                    <GridViewColumn Header="Timestamp" DisplayMemberBinding="{Binding Timestamp, StringFormat='HH:mm:ss'}" Width="150"/>
+                    <GridViewColumn Header="Timestamp" DisplayMemberBinding="{Binding Timestamp, StringFormat='G'}" Width="150"/>
                 </GridView>
             </ListView.View>
         </ListView>
 
-        <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right">
+        <!-- Export UI -->
+        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right">
             <ComboBox ItemsSource="{Binding EventTypes}"
                       SelectedItem="{Binding SelectedEventType}"
                       VerticalContentAlignment="Center"
