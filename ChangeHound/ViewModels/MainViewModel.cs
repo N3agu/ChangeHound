@@ -4,6 +4,7 @@ using ChangeHound.Services;
 using ModernWpf;
 using ModernWpf.Controls;
 using System.Collections.ObjectModel;
+using System.Windows;
 using System.Windows.Input;
 
 namespace ChangeHound.ViewModels {
@@ -54,7 +55,7 @@ namespace ChangeHound.ViewModels {
         public ICommand ToggleThemeCommand { get; }
         #endregion
 
-        #region Constructor
+        #region Constructor & Lifecycle
         public MainViewModel() {
             IConfigurationService configService = new ConfigurationService();
 
@@ -82,10 +83,24 @@ namespace ChangeHound.ViewModels {
 
             CurrentViewModel = _viewModelInstances[typeof(MonitorViewModel)];
             _selectedItem = NavigationItems.First();
+
+            System.Windows.Application.Current.Exit += OnApplicationExit;
+        }
+        public void Dispose() {
+            foreach (var viewModel in _viewModelInstances.Values) {
+                if (viewModel is IDisposable disposable) {
+                    disposable.Dispose();
+                }
+            }
+
+            System.Windows.Application.Current.Exit -= OnApplicationExit;
         }
         #endregion
 
         #region Private Methods
+        private void OnApplicationExit(object sender, ExitEventArgs e) {
+            Dispose();
+        }
         private void Navigate(object selectedItem) {
             if (selectedItem is not NavigationViewItem item) return;
 

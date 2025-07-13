@@ -1,7 +1,5 @@
-﻿using System.ComponentModel;
-
-namespace ChangeHound.Services {
-    public interface IFileSystemMonitorService {
+﻿namespace ChangeHound.Services {
+    public interface IFileSystemMonitorService : IDisposable {
         void StartMonitoring(string path);
         void StopMonitoring();
     }

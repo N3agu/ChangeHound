@@ -50,7 +50,7 @@ namespace ChangeHound.ViewModels {
         public ICommand ExportCommand { get; }
         #endregion
 
-        #region Constructor
+        #region Constructor & Lifecycle
         public MonitorViewModel(IConfigurationService configService) {
             _configService = configService;
             _monitorService = new FileSystemMonitorService(FileChanges);
@@ -67,6 +67,11 @@ namespace ChangeHound.ViewModels {
             _selectedFilterType = EventTypes.First();
             FilteredFileChanges = CollectionViewSource.GetDefaultView(FileChanges);
             FilteredFileChanges.Filter = ApplyFilter;
+        }
+
+        public void Dispose() {
+            _configService.PropertyChanged -= OnConfigurationChanged;
+            _monitorService.Dispose();
         }
         #endregion
 
