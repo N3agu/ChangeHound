@@ -1,7 +1,5 @@
-﻿using System.Windows.Controls;
-
-namespace ChangeHound.Views {
-    public partial class SettingsView : UserControl {
+﻿namespace ChangeHound.Views {
+    public partial class SettingsView : System.Windows.Controls.UserControl {
         public SettingsView() {
             InitializeComponent();
         }

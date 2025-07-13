@@ -1,5 +1,6 @@
 ﻿using ChangeHound.Commands;
 using ChangeHound.Common;
+using ChangeHound.Services;
 using ModernWpf;
 using ModernWpf.Controls;
 using System.Collections.ObjectModel;
@@ -55,8 +56,10 @@ namespace ChangeHound.ViewModels {
 
         #region Constructor
         public MainViewModel() {
-            _viewModelInstances.Add(typeof(MonitorViewModel), new MonitorViewModel());
-            _viewModelInstances.Add(typeof(SettingsViewModel), new SettingsViewModel());
+            IConfigurationService configService = new ConfigurationService();
+
+            _viewModelInstances.Add(typeof(MonitorViewModel), new MonitorViewModel(configService));
+            _viewModelInstances.Add(typeof(SettingsViewModel), new SettingsViewModel(configService));
 
             ThemeManager.Current.ApplicationTheme ??= ApplicationTheme.Dark;
             _currentTheme = ThemeManager.Current.ApplicationTheme.Value;

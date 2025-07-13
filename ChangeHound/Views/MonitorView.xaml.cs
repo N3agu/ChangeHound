@@ -1,7 +1,5 @@
-﻿using System.Windows.Controls;
-
-namespace ChangeHound.Views {
-    public partial class MonitorView : UserControl {
+﻿namespace ChangeHound.Views {
+    public partial class MonitorView : System.Windows.Controls.UserControl {
         public MonitorView() {
             InitializeComponent();
         }

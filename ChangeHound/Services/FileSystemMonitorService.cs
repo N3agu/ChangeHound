@@ -3,7 +3,7 @@ using System.Collections.ObjectModel;
 using System.IO;
 
 namespace ChangeHound.Services {
-    class FileSystemMonitorService {
+    class FileSystemMonitorService : IFileSystemMonitorService {
         private readonly FileSystemWatcher _watcher;
         private readonly ObservableCollection<FileChange> _fileChanges;
 

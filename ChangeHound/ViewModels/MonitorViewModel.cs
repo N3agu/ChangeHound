@@ -14,7 +14,8 @@ using System.Windows.Input;
 namespace ChangeHound.ViewModels {
     public class MonitorViewModel : ViewModelBase {
         #region Fields
-        private readonly FileSystemMonitorService _monitorService;
+        private readonly IConfigurationService _configService;
+        private readonly IFileSystemMonitorService _monitorService;
         public ObservableCollection<FileChange> FileChanges { get; } = new ObservableCollection<FileChange>();
         public ICollectionView FilteredFileChanges { get; }
         #endregion
@@ -50,9 +51,12 @@ namespace ChangeHound.ViewModels {
         #endregion
 
         #region Constructor
-        public MonitorViewModel() {
+        public MonitorViewModel(IConfigurationService configService) {
+            _configService = configService;
             _monitorService = new FileSystemMonitorService(FileChanges);
-            _monitorService.StartMonitoring(@"C:\Test");
+
+            StartMonitoringPath(_configService.MonitorPath);
+            _configService.PropertyChanged += OnConfigurationChanged;
 
             // Initialize Export properties
             EventTypes = new List<string> { "All Events", "Created", "Modified", "Deleted" };
@@ -67,6 +71,20 @@ namespace ChangeHound.ViewModels {
         #endregion
 
         #region Private Methods
+        private void OnConfigurationChanged(object? sender, PropertyChangedEventArgs e) {
+            // if the monitor path was changed in settings
+            if (e.PropertyName == nameof(IConfigurationService.MonitorPath)) {
+                StartMonitoringPath(_configService.MonitorPath);
+            }
+        }
+
+        private void StartMonitoringPath(string? path) {
+            _monitorService.StopMonitoring();
+            if (!string.IsNullOrEmpty(path) && Directory.Exists(path)) {
+                _monitorService.StartMonitoring(path);
+            }
+        }
+
         private bool ApplyFilter(object item) {
             if (item is not FileChange change) {
                 return false;
@@ -87,11 +105,11 @@ namespace ChangeHound.ViewModels {
             }
 
             if (!filteredChanges.Any()) {
-                MessageBox.Show("There are no Events to export!", "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
+                System.Windows.MessageBox.Show("There are no Events to export!", "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
 
-            SaveFileDialog saveFileDialog = new SaveFileDialog {
+            Microsoft.Win32.SaveFileDialog saveFileDialog = new Microsoft.Win32.SaveFileDialog {
                 Filter = "CSV file (*.csv)|*.csv",
                 Title = "Export File Changes",
                 FileName = $"ChangeHound_Export_{DateTime.Now:yyyyMMdd_HHmmss}.csv"

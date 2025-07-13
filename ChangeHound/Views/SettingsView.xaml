@@ -1,12 +1,30 @@
 ﻿<UserControl x:Class="ChangeHound.Views.SettingsView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:ChangeHound.Views"
-             mc:Ignorable="d" 
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             mc:Ignorable="d"
              d:DesignHeight="450" d:DesignWidth="800">
-    <Grid>
-        <TextBlock Text="Settings Page" FontSize="24" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-    </Grid>
+    <StackPanel Margin="20">
+        <TextBlock Text="Monitoring Settings" FontSize="20" FontWeight="SemiBold" Margin="0,0,0,20"/>
+
+        <TextBlock Text="Directory to Monitor:" FontWeight="Medium"/>
+        <Grid Margin="0,5,0,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+
+            <TextBox Grid.Column="0"
+                     Text="{Binding MonitorPath, Mode=OneWay}"
+                     IsReadOnly="True"
+                     VerticalContentAlignment="Center"/>
+
+            <Button Grid.Column="1"
+                    Content="Browse..."
+                    Command="{Binding SelectPathCommand}"
+                    Margin="10,0,0,0"
+                    Padding="10,5"/>
+        </Grid>
+    </StackPanel>
 </UserControl>
