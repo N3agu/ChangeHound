@@ -1,6 +1,6 @@
 ﻿using System.Windows;
 
-namespace ChangeHound {
+namespace ChangeHound.Views {
     public partial class MainView : Window {
         public MainView() {
             InitializeComponent();

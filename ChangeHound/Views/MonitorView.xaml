@@ -7,6 +7,54 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid Margin="10">
-            
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <!-- Filter UI -->
+        <Grid Grid.Row="0" Margin="0,0,0,10">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" /> <!-- for TextBox -->
+                <ColumnDefinition Width="Auto" /> <!-- for ComboBox -->
+            </Grid.ColumnDefinitions>
+
+            <TextBox Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"
+                     Grid.Column="0"
+                     VerticalContentAlignment="Center"
+                     Padding="5,0"/>
+
+            <ComboBox ItemsSource="{Binding EventTypes}"
+                      Grid.Column="1"
+                      SelectedItem="{Binding SelectedFilterType}"
+                      VerticalContentAlignment="Center"
+                      Margin="10,0,0,0"
+                      Width="110"/>
+        </Grid>
+
+        <!-- Event List UI -->
+        <ListView Grid.Row="1" ItemsSource="{Binding FilteredFileChanges}" Margin="0,0,0,10">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Header="Event" DisplayMemberBinding="{Binding EventType}" Width="100"/>
+                    <GridViewColumn Header="File Path" DisplayMemberBinding="{Binding FilePath}" Width="Auto"/>
+                    <GridViewColumn Header="Timestamp" DisplayMemberBinding="{Binding Timestamp, StringFormat='G'}" Width="150"/>
+                </GridView>
+            </ListView.View>
+        </ListView>
+
+        <!-- Export UI -->
+        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right">
+            <ComboBox ItemsSource="{Binding EventTypes}"
+                      SelectedItem="{Binding SelectedEventType}"
+                      VerticalContentAlignment="Center"
+                      Margin="10,0,0,0"
+                      Width="110"/>
+
+            <Button Content="Export Events" 
+                    Command="{Binding ExportCommand}" 
+                    Margin="10,0,0,0" 
+                    Padding="10,5"/>
+        </StackPanel>
     </Grid>
 </UserControl>
