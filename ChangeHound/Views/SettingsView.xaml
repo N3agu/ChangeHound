@@ -3,28 +3,75 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:ui="http://schemas.modernwpf.com/2019"
              mc:Ignorable="d"
-             d:DesignHeight="450" d:DesignWidth="800">
-    <StackPanel Margin="20">
-        <TextBlock Text="Monitoring Settings" FontSize="20" FontWeight="SemiBold" Margin="0,0,0,20"/>
+             d:DesignHeight="600" d:DesignWidth="800">
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <StackPanel Margin="20">
+            <TextBlock Text="Settings" FontSize="24" FontWeight="SemiBold" Margin="0,0,0,20"/>
 
-        <TextBlock Text="Directory to Monitor:" FontWeight="Medium"/>
-        <Grid Margin="0,5,0,0">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="Auto" />
-            </Grid.ColumnDefinitions>
+            <TextBlock Text="File Monitor" FontSize="18" FontWeight="SemiBold" Margin="0,0,0,10"/>
+            <StackPanel Margin="0,0,0,25">
+                <TextBlock Text="Directory to Monitor:" FontWeight="Medium"/>
+                <Grid Margin="0,5,0,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <TextBox Grid.Column="0"
+                             Text="{Binding MonitorPath, Mode=OneWay}"
+                             IsReadOnly="True"
+                             VerticalContentAlignment="Center"/>
+                    <Button Grid.Column="1"
+                            Content="Browse..."
+                            Command="{Binding SelectPathCommand}"
+                            Margin="10,0,0,0"
+                            Padding="10,5"/>
+                </Grid>
+                <Button Content="Monitor All System Files" 
+                        IsEnabled="False"
+                        Margin="0,15,0,0" HorizontalAlignment="Left" Padding="10,5"/>
+            </StackPanel>
 
-            <TextBox Grid.Column="0"
-                     Text="{Binding MonitorPath, Mode=OneWay}"
-                     IsReadOnly="True"
-                     VerticalContentAlignment="Center"/>
+            <TextBlock Text="Process Monitor" FontSize="18" FontWeight="SemiBold" Margin="0,0,0,10"/>
+            <StackPanel Margin="0,0,0,25">
+                <TextBlock Text="Process Whitelist (processes to ignore):" FontWeight="Medium"/>
+                <ListView Height="100" Margin="0,5,0,0" IsEnabled="False"/>
+                <Grid Margin="0,10,0,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBox Grid.Column="0" ui:ControlHelper.PlaceholderText="Enter process name (e.g., chrome.exe)" IsEnabled="False" VerticalContentAlignment="Center"/>
+                    <Button Grid.Column="1" Content="Add" Margin="10,0,0,0" IsEnabled="False" Padding="10,5"/>
+                </Grid>
+            </StackPanel>
 
-            <Button Grid.Column="1"
-                    Content="Browse..."
-                    Command="{Binding SelectPathCommand}"
-                    Margin="10,0,0,0"
-                    Padding="10,5"/>
-        </Grid>
-    </StackPanel>
+            <TextBlock Text="Registry Monitor" FontSize="18" FontWeight="SemiBold" Margin="0,0,0,10"/>
+            <StackPanel Margin="0,0,0,25">
+                <TextBlock Text="Registry Key Path:" FontWeight="Medium"/>
+                <TextBox Margin="0,5,0,0" ui:ControlHelper.PlaceholderText="e.g., HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft" IsEnabled="False"/>
+                <Button Content="Monitor All Registries"
+                        Margin="0,10,0,0"
+                        HorizontalAlignment="Left"
+                        IsEnabled="False" Padding="10,5"/>
+            </StackPanel>
+
+            <TextBlock Text="Application Settings" FontSize="18" FontWeight="SemiBold" Margin="0,0,0,10"/>
+            <StackPanel>
+                <CheckBox Content="Enable Start on System Startup"
+                  IsEnabled="False"
+                  HorizontalAlignment="Left"/>
+                <CheckBox Content="Allow Desktop Notifications"
+                              IsEnabled="False"
+                              HorizontalAlignment="Left"
+                              Margin="0,10,0,0"/>
+                <CheckBox Content="Minimize to System Tray"
+                              IsEnabled="False"
+                              HorizontalAlignment="Left"
+                              Margin="0,10,0,0"/>
+            </StackPanel>
+
+        </StackPanel>
+    </ScrollViewer>
 </UserControl>
