@@ -12,7 +12,7 @@ using System.Windows.Data;
 using System.Windows.Input;
 
 namespace ChangeHound.ViewModels {
-    public class MonitorViewModel : ViewModelBase {
+    public class FileMonitorViewModel : ViewModelBase {
         #region Fields
         private readonly IConfigurationService _configService;
         private readonly IFileSystemMonitorService _monitorService;
@@ -51,7 +51,7 @@ namespace ChangeHound.ViewModels {
         #endregion
 
         #region Constructor & Lifecycle
-        public MonitorViewModel(IConfigurationService configService) {
+        public FileMonitorViewModel(IConfigurationService configService) {
             _configService = configService;
             _monitorService = new FileSystemMonitorService(FileChanges);
 
@@ -124,8 +124,8 @@ namespace ChangeHound.ViewModels {
                 StringBuilder csvString = new StringBuilder();
                 csvString.AppendLine("EventType,FilePath,Timestamp"); // header for the csv
 
-                foreach (var change in filteredChanges) {
-                    csvString.AppendLine($"{change.EventType},\"{change.FilePath}\",{change.Timestamp:o}"); // Use ISO 8601 for timestamp
+                foreach (FileChange change in filteredChanges) {
+                    csvString.AppendLine($"{change.EventType},\"{change.FilePath}\",{change.Timestamp:o}"); // ISO8601
                 }
 
                 File.WriteAllText(saveFileDialog.FileName, csvString.ToString());

@@ -29,7 +29,7 @@ namespace ChangeHound.ViewModels {
 
         #region Private Methods
         private void SelectPath(object? parameter) {
-            var dialog = new FolderBrowserDialog {
+            FolderBrowserDialog dialog = new FolderBrowserDialog {
                 ShowHiddenFiles = true,
                 SelectedPath = _configService.MonitorPath ?? Environment.GetFolderPath(Environment.SpecialFolder.Desktop)
             };

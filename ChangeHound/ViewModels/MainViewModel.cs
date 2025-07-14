@@ -59,7 +59,7 @@ namespace ChangeHound.ViewModels {
         public MainViewModel() {
             IConfigurationService configService = new ConfigurationService();
 
-            _viewModelInstances.Add(typeof(MonitorViewModel), new MonitorViewModel(configService));
+            _viewModelInstances.Add(typeof(FileMonitorViewModel), new FileMonitorViewModel(configService));
             _viewModelInstances.Add(typeof(SettingsViewModel), new SettingsViewModel(configService));
 
             ThemeManager.Current.ApplicationTheme ??= ApplicationTheme.Dark;
@@ -69,7 +69,7 @@ namespace ChangeHound.ViewModels {
                 new NavigationViewItem {
                     Content = "File Monitor",
                     Icon = new SymbolIcon { Symbol = Symbol.Document },
-                    Tag = typeof(MonitorViewModel)
+                    Tag = typeof(FileMonitorViewModel)
                 },
                 new NavigationViewItem {
                     Content = "Settings",
@@ -81,13 +81,13 @@ namespace ChangeHound.ViewModels {
 
             ToggleThemeCommand = new DelegateCommand(ToggleTheme);
 
-            CurrentViewModel = _viewModelInstances[typeof(MonitorViewModel)];
+            CurrentViewModel = _viewModelInstances[typeof(FileMonitorViewModel)];
             _selectedItem = NavigationItems.First();
 
             System.Windows.Application.Current.Exit += OnApplicationExit;
         }
         public void Dispose() {
-            foreach (var viewModel in _viewModelInstances.Values) {
+            foreach (ViewModelBase viewModel in _viewModelInstances.Values) {
                 if (viewModel is IDisposable disposable) {
                     disposable.Dispose();
                 }
@@ -110,7 +110,7 @@ namespace ChangeHound.ViewModels {
         }
 
         private void ToggleTheme(object? parameter = null) {
-            var newTheme = CurrentTheme == ApplicationTheme.Dark
+            ApplicationTheme newTheme = CurrentTheme == ApplicationTheme.Dark
                 ? ApplicationTheme.Light
                 : ApplicationTheme.Dark;
 

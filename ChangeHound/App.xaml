@@ -13,8 +13,8 @@
                 <ui:XamlControlsResources />
             </ResourceDictionary.MergedDictionaries>
 
-            <DataTemplate DataType="{x:Type vm:MonitorViewModel}">
-                <v:MonitorView/>
+            <DataTemplate DataType="{x:Type vm:FileMonitorViewModel}">
+                <v:FileMonitorView/>
             </DataTemplate>
             <DataTemplate DataType="{x:Type vm:SettingsViewModel}">
                 <v:SettingsView/>
