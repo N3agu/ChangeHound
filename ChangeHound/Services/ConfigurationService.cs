@@ -14,12 +14,20 @@ namespace ChangeHound.Services {
             get => _minimizeToTray;
             set => SetProperty(ref _minimizeToTray, value);
         }
+
+        private bool _allowNotifications;
+        public bool AllowNotifications {
+            get => _allowNotifications;
+            set => SetProperty(ref _allowNotifications, value);
+        }
         #endregion
 
         #region Constructor
         public ConfigurationService() {
+            // default values
             _monitorPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
             MinimizeToTray = false;
+            AllowNotifications = true;
         }
         #endregion
     }

@@ -16,6 +16,11 @@ namespace ChangeHound.ViewModels {
             get => _configService.MinimizeToTray;
             set => _configService.MinimizeToTray = value;
         }
+
+        public bool AllowNotifications {
+            get => _configService.AllowNotifications;
+            set => _configService.AllowNotifications = value;
+        }
         #endregion
 
         #region Constructor
@@ -24,10 +29,9 @@ namespace ChangeHound.ViewModels {
             SelectPathCommand = new DelegateCommand(SelectPath);
 
             _configService.PropertyChanged += (s, e) => {
-                if (e.PropertyName == nameof(IConfigurationService.MonitorPath)) {
-                    OnPropertyChanged(nameof(MonitorPath));
-                    OnPropertyChanged(nameof(MinimizeToTray));
-                }
+                OnPropertyChanged(nameof(MonitorPath));
+                OnPropertyChanged(nameof(MinimizeToTray));
+                OnPropertyChanged(nameof(AllowNotifications));
             };
         }
         #endregion

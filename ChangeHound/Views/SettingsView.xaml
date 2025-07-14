@@ -63,7 +63,7 @@
                   IsEnabled="False"
                   HorizontalAlignment="Left"/>
                 <CheckBox Content="Allow Desktop Notifications"
-                              IsEnabled="False"
+                              IsChecked="{Binding AllowNotifications}"
                               HorizontalAlignment="Left"
                               Margin="0,10,0,0"/>
                 <CheckBox Content="Exit to System Tray"

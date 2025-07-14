@@ -1,6 +1,7 @@
-﻿using System.IO;
-using System.Windows;
+﻿using ChangeHound.Common;
 using ChangeHound.ViewModels;
+using System.IO;
+using System.Windows;
 
 namespace ChangeHound.Helpers {
     public class TrayIconHelper : IDisposable {
@@ -29,6 +30,11 @@ namespace ChangeHound.Helpers {
             _notifyIcon.ContextMenuStrip = new ContextMenuStrip();
             _notifyIcon.ContextMenuStrip.Items.Add("Show", null, (s, e) => ShowWindow());
             _notifyIcon.ContextMenuStrip.Items.Add("Exit", null, (s, e) => ExitApplication());
+
+            // tray icon always visible
+            _notifyIcon.Visible = true;
+
+            EventAggregator.Subscribe<NotificationMessage>(ShowNotification);
         }
 
         public void Dispose() {
@@ -38,6 +44,10 @@ namespace ChangeHound.Helpers {
         #endregion
 
         #region Private Methods
+        private void ShowNotification(NotificationMessage message) {
+            _notifyIcon.ShowBalloonTip(3000, message.Title, message.Message, ToolTipIcon.Info);
+        }
+
         private void OnClosing(object? sender, System.ComponentModel.CancelEventArgs e) {
             // cleanup on intentional exit
             if (_isExiting) {
@@ -45,15 +55,14 @@ namespace ChangeHound.Helpers {
                 return;
             }
 
-            if (_window.DataContext is not MainViewModel vm) return;
+            if (_window.DataContext is not MainViewModel mainViewModel) return;
 
-            if (vm.MinimizeToTray) {
+            if (mainViewModel.MinimizeToTray) {
                 // cancel the close event
                 e.Cancel = true;
 
-                // hide the window and show the tray icon
+                // hide the window
                 _window.Hide();
-                _notifyIcon.Visible = true;
             }
         }
 

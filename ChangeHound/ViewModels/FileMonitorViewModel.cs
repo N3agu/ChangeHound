@@ -2,8 +2,8 @@
 using ChangeHound.Common;
 using ChangeHound.Models;
 using ChangeHound.Services;
-using Microsoft.Win32;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.ComponentModel;
 using System.IO;
 using System.Text;
@@ -55,6 +55,8 @@ namespace ChangeHound.ViewModels {
             _configService = configService;
             _monitorService = new FileSystemMonitorService(FileChanges);
 
+            FileChanges.CollectionChanged += OnNewFileChange;
+
             StartMonitoringPath(_configService.MonitorPath);
             _configService.PropertyChanged += OnConfigurationChanged;
 
@@ -76,6 +78,20 @@ namespace ChangeHound.ViewModels {
         #endregion
 
         #region Private Methods
+        private void OnNewFileChange(object? sender, NotifyCollectionChangedEventArgs e) {
+            if (!_configService.AllowNotifications) return;
+
+            if (e.Action == NotifyCollectionChangedAction.Add && e.NewItems != null) {
+                foreach (FileChange change in e.NewItems) {
+                    string title = $"File {change.EventType}";
+                    string message = $"{change.EventType.ToLower()} the file:\n{change.FilePath}";
+
+                    // send the notification message
+                    EventAggregator.Publish(new NotificationMessage(title, message));
+                }
+            }
+        }
+
         private void OnConfigurationChanged(object? sender, PropertyChangedEventArgs e) {
             // if the monitor path was changed in settings
             if (e.PropertyName == nameof(IConfigurationService.MonitorPath)) {
