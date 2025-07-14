@@ -66,8 +66,8 @@
                               IsEnabled="False"
                               HorizontalAlignment="Left"
                               Margin="0,10,0,0"/>
-                <CheckBox Content="Minimize to System Tray"
-                              IsEnabled="False"
+                <CheckBox Content="Exit to System Tray"
+                              IsChecked="{Binding MinimizeToTray}"
                               HorizontalAlignment="Left"
                               Margin="0,10,0,0"/>
             </StackPanel>

@@ -12,6 +12,10 @@ namespace ChangeHound.ViewModels {
 
         #region Properties
         public ICommand SelectPathCommand { get; }
+        public bool MinimizeToTray {
+            get => _configService.MinimizeToTray;
+            set => _configService.MinimizeToTray = value;
+        }
         #endregion
 
         #region Constructor
@@ -22,6 +26,7 @@ namespace ChangeHound.ViewModels {
             _configService.PropertyChanged += (s, e) => {
                 if (e.PropertyName == nameof(IConfigurationService.MonitorPath)) {
                     OnPropertyChanged(nameof(MonitorPath));
+                    OnPropertyChanged(nameof(MinimizeToTray));
                 }
             };
         }

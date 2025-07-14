@@ -5,11 +5,13 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:converters="clr-namespace:ChangeHound.Converters"
         xmlns:viewModels="clr-namespace:ChangeHound.ViewModels"
+        xmlns:behaviors="clr-namespace:ChangeHound.Behaviors"
         xmlns:ui="http://schemas.modernwpf.com/2019"
         mc:Ignorable="d"
         ui:WindowHelper.UseModernWindowStyle="True"
         Title="ChangeHound" Height="600" Width="950"
-        WindowStartupLocation="CenterScreen">
+        WindowStartupLocation="CenterScreen"
+        behaviors:TrayIconBehavior.IsEnabled="True">
 
     <Window.Resources>
         <converters:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />

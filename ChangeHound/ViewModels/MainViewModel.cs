@@ -10,6 +10,7 @@ using System.Windows.Input;
 namespace ChangeHound.ViewModels {
     public class MainViewModel : ViewModelBase {
         #region Fields
+        private readonly IConfigurationService _configService;
         private readonly Dictionary<Type, ViewModelBase> _viewModelInstances = new Dictionary<Type, ViewModelBase>();
         public ObservableCollection<object> NavigationItems { get; }
         public string ToggleThemeIcon =>
@@ -17,6 +18,8 @@ namespace ChangeHound.ViewModels {
 
         public string ToggleThemeLabel =>
             CurrentTheme == ApplicationTheme.Dark ? "Light Mode" : "Dark Mode";
+
+        public bool MinimizeToTray => _configService.MinimizeToTray;
         #endregion
 
         #region Properties
@@ -57,12 +60,18 @@ namespace ChangeHound.ViewModels {
 
         #region Constructor & Lifecycle
         public MainViewModel() {
-            IConfigurationService configService = new ConfigurationService();
+            _configService = new ConfigurationService();
 
-            _viewModelInstances.Add(typeof(FileMonitorViewModel), new FileMonitorViewModel(configService));
-            _viewModelInstances.Add(typeof(ProcessMonitorViewModel), new ProcessMonitorViewModel(configService));
-            _viewModelInstances.Add(typeof(RegistryMonitorViewModel), new RegistryMonitorViewModel(configService));
-            _viewModelInstances.Add(typeof(SettingsViewModel), new SettingsViewModel(configService));
+            _configService.PropertyChanged += (s, e) => {
+                if (e.PropertyName == nameof(IConfigurationService.MinimizeToTray)) {
+                    OnPropertyChanged(nameof(MinimizeToTray));
+                }
+            };
+
+            _viewModelInstances.Add(typeof(FileMonitorViewModel), new FileMonitorViewModel(_configService));
+            _viewModelInstances.Add(typeof(ProcessMonitorViewModel), new ProcessMonitorViewModel(_configService));
+            _viewModelInstances.Add(typeof(RegistryMonitorViewModel), new RegistryMonitorViewModel(_configService));
+            _viewModelInstances.Add(typeof(SettingsViewModel), new SettingsViewModel(_configService));
 
             ThemeManager.Current.ApplicationTheme ??= ApplicationTheme.Dark;
             _currentTheme = ThemeManager.Current.ApplicationTheme.Value;
