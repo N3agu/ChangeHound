@@ -3,7 +3,7 @@
         private static readonly Dictionary<Type, List<object>> _subscribers = new();
 
         public static void Subscribe<T>(Action<T> action) {
-            var messageType = typeof(T);
+            Type? messageType = typeof(T);
             if (!_subscribers.ContainsKey(messageType)) {
                 _subscribers[messageType] = new List<object>();
             }
@@ -11,9 +11,9 @@
         }
 
         public static void Publish<T>(T message) {
-            var messageType = typeof(T);
+            Type? messageType = typeof(T);
             if (_subscribers.ContainsKey(messageType)) {
-                foreach (var subscriber in _subscribers[messageType]) {
+                foreach (object? subscriber in _subscribers[messageType]) {
                     (subscriber as Action<T>)?.Invoke(message);
                 }
             }

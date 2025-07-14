@@ -3,10 +3,92 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:ChangeHound.Views"
+             xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
+             xmlns:viewModels="clr-namespace:ChangeHound.ViewModels"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
-    <Grid>
-        <TextBlock Text="Resource Monitor" FontSize="24" FontWeight="SemiBold" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-    </Grid>
+             d:DesignHeight="800" d:DesignWidth="800">
+    <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+        <StackPanel Margin="20">
+            <TextBlock Text="Resource Monitor" FontSize="24" FontWeight="SemiBold" Margin="0,0,0,15"/>
+
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Grid.Column="0" Margin="5">
+                    <TextBlock Text="CPU" HorizontalAlignment="Center" FontSize="16" FontWeight="SemiBold"/>
+                    <Grid Height="140" Margin="0,5,0,0">
+                        <lvc:PieChart Series="{Binding CpuSeries}" InnerRadius="50" Hoverable="False" DataTooltip="{x:Null}" />
+                        <TextBlock Text="{Binding CpuSeries[0].Values[0], StringFormat={}{0:F0}%}" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="22" FontWeight="Bold"/>
+                    </Grid>
+                </StackPanel>
+
+                <StackPanel Grid.Column="1" Margin="5">
+                    <TextBlock Text="Memory" HorizontalAlignment="Center" FontSize="16" FontWeight="SemiBold"/>
+                    <Grid Height="140" Margin="0,5,0,0">
+                        <lvc:PieChart Series="{Binding MemorySeries}" InnerRadius="50" Hoverable="False" DataTooltip="{x:Null}" />
+                        <TextBlock Text="{Binding MemorySeries[0].Values[0], StringFormat={}{0:F0}%}" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="22" FontWeight="Bold"/>
+                    </Grid>
+                </StackPanel>
+
+                <StackPanel Grid.Column="2" Margin="5">
+                    <TextBlock Text="GPU" HorizontalAlignment="Center" FontSize="16" FontWeight="SemiBold"/>
+                    <Grid Height="140" Margin="0,5,0,0">
+                        <lvc:PieChart Series="{Binding GpuSeries}" InnerRadius="50" Hoverable="False" DataTooltip="{x:Null}" />
+                        <TextBlock Text="{Binding GpuSeries[0].Values[0], StringFormat={}{0:F0}%}" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="22" FontWeight="Bold"/>
+                    </Grid>
+                </StackPanel>
+            </Grid>
+            <TextBlock Text="{Binding PowerUsage, StringFormat={}Power: {0:F1} W}" HorizontalAlignment="Center" FontSize="12" Opacity="0.8" Margin="0,0,0,20"/>
+
+            <TextBlock Text="Disk Drives" FontSize="18" FontWeight="SemiBold" Margin="0,15,0,10"/>
+            <ItemsControl ItemsSource="{Binding Disks}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Grid Margin="0,4">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" Text="{Binding Name}" FontWeight="Medium" MinWidth="40"/>
+                            <ProgressBar Grid.Column="1" Value="{Binding PercentUsed}" Height="18" Margin="10,0"/>
+                            <TextBlock Grid.Column="2" Opacity="0.8" Text="{Binding FreeSpaceGB, StringFormat='{}{0:F1} GB free'}"/>
+                        </Grid>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+
+            <TextBlock Text="System Information" FontSize="18" FontWeight="SemiBold" Margin="0,25,0,10"/>
+            <Border CornerRadius="4" Padding="15">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                    <TextBlock Grid.Row="0" Grid.Column="0" Text="Type:" FontWeight="Medium" Margin="0,0,15,5"/>
+                    <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding SystemInfo.FormFactor}"/>
+
+                    <TextBlock Grid.Row="1" Grid.Column="0" Text="CPU:" FontWeight="Medium" Margin="0,0,15,5"/>
+                    <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding SystemInfo.CpuName}" TextWrapping="Wrap"/>
+
+                    <TextBlock Grid.Row="2" Grid.Column="0" Text="GPU:" FontWeight="Medium" Margin="0,0,15,5"/>
+                    <TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding SystemInfo.GpuName}" TextWrapping="Wrap"/>
+
+                    <TextBlock Grid.Row="3" Grid.Column="0" Text="RAM:" FontWeight="Medium" Margin="0,0,15,0"/>
+                    <TextBlock Grid.Row="3" Grid.Column="1" Text="{Binding SystemInfo.TotalRamGB, StringFormat='{}{0} GB'}"/>
+                </Grid>
+            </Border>
+        </StackPanel>
+    </ScrollViewer>
 </UserControl>

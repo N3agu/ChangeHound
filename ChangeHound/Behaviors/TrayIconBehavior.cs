@@ -12,10 +12,10 @@ namespace ChangeHound.Behaviors {
             if (d is not Window window) return;
 
             if ((bool)e.NewValue) {
-                var existingHelper = GetTrayHelper(window);
+                TrayIconHelper? existingHelper = GetTrayHelper(window);
                 if (existingHelper == null) SetTrayHelper(window, new TrayIconHelper(window));
             } else {
-                var helper = GetTrayHelper(window);
+                TrayIconHelper? helper = GetTrayHelper(window);
                 helper?.Dispose();
                 SetTrayHelper(window, null);
             }
@@ -25,6 +25,6 @@ namespace ChangeHound.Behaviors {
             DependencyProperty.RegisterAttached("TrayHelper", typeof(TrayIconHelper), typeof(TrayIconBehavior));
 
         private static TrayIconHelper GetTrayHelper(DependencyObject obj) => (TrayIconHelper)obj.GetValue(TrayHelperProperty);
-        private static void SetTrayHelper(DependencyObject obj, TrayIconHelper value) => obj.SetValue(TrayHelperProperty, value);
+        private static void SetTrayHelper(DependencyObject obj, TrayIconHelper? value) => obj.SetValue(TrayHelperProperty, value);
     }
 }
