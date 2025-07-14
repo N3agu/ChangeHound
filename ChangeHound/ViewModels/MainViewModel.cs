@@ -60,6 +60,8 @@ namespace ChangeHound.ViewModels {
             IConfigurationService configService = new ConfigurationService();
 
             _viewModelInstances.Add(typeof(FileMonitorViewModel), new FileMonitorViewModel(configService));
+            _viewModelInstances.Add(typeof(ProcessMonitorViewModel), new ProcessMonitorViewModel(configService));
+            _viewModelInstances.Add(typeof(RegistryMonitorViewModel), new RegistryMonitorViewModel(configService));
             _viewModelInstances.Add(typeof(SettingsViewModel), new SettingsViewModel(configService));
 
             ThemeManager.Current.ApplicationTheme ??= ApplicationTheme.Dark;
@@ -70,6 +72,16 @@ namespace ChangeHound.ViewModels {
                     Content = "File Monitor",
                     Icon = new SymbolIcon { Symbol = Symbol.Document },
                     Tag = typeof(FileMonitorViewModel)
+                },
+                new NavigationViewItem {
+                    Content = "Proc Monitor",
+                    Icon = new SymbolIcon { Symbol = Symbol.ViewAll },
+                    Tag = typeof(ProcessMonitorViewModel)
+                },
+                new NavigationViewItem {
+                    Content = "Reg Monitor",
+                    Icon = new SymbolIcon { Symbol = Symbol.Library },
+                    Tag = typeof(RegistryMonitorViewModel)
                 },
                 new NavigationViewItem {
                     Content = "Settings",

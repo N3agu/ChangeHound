@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:converters="clr-namespace:ChangeHound.Converters"
-        xmlns:vm="clr-namespace:ChangeHound.ViewModels"
+        xmlns:viewModels="clr-namespace:ChangeHound.ViewModels"
         xmlns:ui="http://schemas.modernwpf.com/2019"
         mc:Ignorable="d"
         ui:WindowHelper.UseModernWindowStyle="True"
@@ -60,7 +60,7 @@
     </Window.Resources>
 
     <Window.DataContext>
-        <vm:MainViewModel/>
+        <viewModels:MainViewModel/>
     </Window.DataContext>
 
     <ui:NavigationView

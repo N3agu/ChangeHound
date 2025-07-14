@@ -3,8 +3,8 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:ChangeHound"
              StartupUri="Views/MainView.xaml"
-             xmlns:vm="clr-namespace:ChangeHound.ViewModels"
-             xmlns:v="clr-namespace:ChangeHound.Views"
+             xmlns:viewModels="clr-namespace:ChangeHound.ViewModels"
+             xmlns:views="clr-namespace:ChangeHound.Views"
              xmlns:ui="http://schemas.modernwpf.com/2019">
     <Application.Resources>
         <ResourceDictionary>
@@ -13,11 +13,17 @@
                 <ui:XamlControlsResources />
             </ResourceDictionary.MergedDictionaries>
 
-            <DataTemplate DataType="{x:Type vm:FileMonitorViewModel}">
-                <v:FileMonitorView/>
+            <DataTemplate DataType="{x:Type viewModels:FileMonitorViewModel}">
+                <views:FileMonitorView/>
             </DataTemplate>
-            <DataTemplate DataType="{x:Type vm:SettingsViewModel}">
-                <v:SettingsView/>
+            <DataTemplate DataType="{x:Type viewModels:ProcessMonitorViewModel}">
+                <views:ProcessMonitorView/>
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type viewModels:RegistryMonitorViewModel}">
+                <views:RegistryMonitorViewModel/>
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type viewModels:SettingsViewModel}">
+                <views:SettingsView/>
             </DataTemplate>
         </ResourceDictionary>
     </Application.Resources>
