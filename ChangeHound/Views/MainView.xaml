@@ -70,7 +70,7 @@
         MenuItemsSource="{Binding NavigationItems}"
         SelectedItem="{Binding SelectedItem, Mode=TwoWay}"
         PaneDisplayMode="Left"
-        OpenPaneLength="150"
+        OpenPaneLength="180"
         IsSettingsVisible="False"
         IsBackButtonVisible="Collapsed">
 

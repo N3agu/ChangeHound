@@ -22,6 +22,9 @@
             <DataTemplate DataType="{x:Type viewModels:RegistryMonitorViewModel}">
                 <views:RegistryMonitorViewModel/>
             </DataTemplate>
+            <DataTemplate DataType="{x:Type viewModels:ResourceMonitorViewModel}">
+                <views:ResourceMonitorView/>
+            </DataTemplate>
             <DataTemplate DataType="{x:Type viewModels:SettingsViewModel}">
                 <views:SettingsView/>
             </DataTemplate>

@@ -70,6 +70,7 @@ namespace ChangeHound.ViewModels {
 
             _viewModelInstances.Add(typeof(FileMonitorViewModel), new FileMonitorViewModel(_configService));
             _viewModelInstances.Add(typeof(ProcessMonitorViewModel), new ProcessMonitorViewModel(_configService));
+            _viewModelInstances.Add(typeof(ResourceMonitorViewModel), new ResourceMonitorViewModel(_configService));
             _viewModelInstances.Add(typeof(RegistryMonitorViewModel), new RegistryMonitorViewModel(_configService));
             _viewModelInstances.Add(typeof(SettingsViewModel), new SettingsViewModel(_configService));
 
@@ -79,18 +80,23 @@ namespace ChangeHound.ViewModels {
             NavigationItems = new ObservableCollection<object> {
                 new NavigationViewItem {
                     Content = "File Monitor",
-                    Icon = new SymbolIcon { Symbol = Symbol.Document },
+                    Icon = new FontIcon { FontFamily = new System.Windows.Media.FontFamily("Segoe MDL2 Assets"), Glyph = "\uED41" },
                     Tag = typeof(FileMonitorViewModel)
                 },
                 new NavigationViewItem {
-                    Content = "Proc Monitor",
-                    Icon = new SymbolIcon { Symbol = Symbol.ViewAll },
+                    Content = "Process Monitor",
+                    Icon = new FontIcon { FontFamily = new System.Windows.Media.FontFamily("Segoe MDL2 Assets"), Glyph = "\uE9F5" },
                     Tag = typeof(ProcessMonitorViewModel)
                 },
                 new NavigationViewItem {
-                    Content = "Reg Monitor",
-                    Icon = new SymbolIcon { Symbol = Symbol.Library },
+                    Content = "Registry Monitor",
+                    Icon = new FontIcon { FontFamily = new System.Windows.Media.FontFamily("Segoe MDL2 Assets"), Glyph = "\uE9F9" },
                     Tag = typeof(RegistryMonitorViewModel)
+                },
+                new NavigationViewItem {
+                    Content = "Resource Monitor",
+                    Icon = new FontIcon { FontFamily = new System.Windows.Media.FontFamily("Segoe MDL2 Assets"), Glyph = "\uE9D9" },
+                    Tag = typeof(ResourceMonitorViewModel)
                 },
                 new NavigationViewItem {
                     Content = "Settings",
