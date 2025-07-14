@@ -70,7 +70,6 @@ namespace ChangeHound.Helpers {
             _window.Show();
             _window.WindowState = WindowState.Normal;
             _window.Activate();
-            _notifyIcon.Visible = false;
         }
 
         private void ExitApplication() {

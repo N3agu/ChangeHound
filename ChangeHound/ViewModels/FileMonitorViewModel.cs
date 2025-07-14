@@ -79,7 +79,7 @@ namespace ChangeHound.ViewModels {
 
         #region Private Methods
         private void OnNewFileChange(object? sender, NotifyCollectionChangedEventArgs e) {
-            if (!_configService.AllowNotifications) return;
+            if (!_configService.FileNotificationsEnabled) return;
 
             if (e.Action == NotifyCollectionChangedAction.Add && e.NewItems != null) {
                 foreach (FileChange change in e.NewItems) {

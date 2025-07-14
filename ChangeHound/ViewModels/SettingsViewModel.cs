@@ -17,9 +17,19 @@ namespace ChangeHound.ViewModels {
             set => _configService.MinimizeToTray = value;
         }
 
-        public bool AllowNotifications {
-            get => _configService.AllowNotifications;
-            set => _configService.AllowNotifications = value;
+        public bool FileNotificationsEnabled {
+            get => _configService.FileNotificationsEnabled;
+            set => _configService.FileNotificationsEnabled = value;
+        }
+        
+        public bool ProcessNotificationsEnabled {
+            get => _configService.ProcessNotificationsEnabled;
+            set => _configService.ProcessNotificationsEnabled = value;
+        }
+        
+        public bool RegistryNotificationsEnabled {
+            get => _configService.RegistryNotificationsEnabled;
+            set => _configService.RegistryNotificationsEnabled = value;
         }
         #endregion
 
@@ -29,9 +39,7 @@ namespace ChangeHound.ViewModels {
             SelectPathCommand = new DelegateCommand(SelectPath);
 
             _configService.PropertyChanged += (s, e) => {
-                OnPropertyChanged(nameof(MonitorPath));
-                OnPropertyChanged(nameof(MinimizeToTray));
-                OnPropertyChanged(nameof(AllowNotifications));
+                OnPropertyChanged(string.Empty);
             };
         }
         #endregion

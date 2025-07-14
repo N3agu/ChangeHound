@@ -15,11 +15,24 @@ namespace ChangeHound.Services {
             set => SetProperty(ref _minimizeToTray, value);
         }
 
-        private bool _allowNotifications;
-        public bool AllowNotifications {
-            get => _allowNotifications;
-            set => SetProperty(ref _allowNotifications, value);
+        private bool _fileNotificationsEnabled;
+        public bool FileNotificationsEnabled {
+            get => _fileNotificationsEnabled;
+            set => SetProperty(ref _fileNotificationsEnabled, value);
         }
+
+        private bool _processNotificationsEnabled;
+        public bool ProcessNotificationsEnabled {
+            get => _processNotificationsEnabled;
+            set => SetProperty(ref _processNotificationsEnabled, value);
+        }
+
+        private bool _registryNotificationsEnabled;
+        public bool RegistryNotificationsEnabled {
+            get => _registryNotificationsEnabled;
+            set => SetProperty(ref _registryNotificationsEnabled, value);
+        }
+
         #endregion
 
         #region Constructor
@@ -27,7 +40,9 @@ namespace ChangeHound.Services {
             // default values
             _monitorPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
             MinimizeToTray = false;
-            AllowNotifications = true;
+            FileNotificationsEnabled = false;
+            ProcessNotificationsEnabled = false;
+            RegistryNotificationsEnabled = false;
         }
         #endregion
     }

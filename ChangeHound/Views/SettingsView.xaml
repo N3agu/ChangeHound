@@ -28,16 +28,17 @@
                             Margin="10,0,0,0"
                             Padding="10,5"/>
                 </Grid>
-                <Button Content="Monitor All System Files" 
+                <CheckBox Content="Monitor All System Files" 
                         IsEnabled="False"
-                        Margin="0,15,0,0" HorizontalAlignment="Left" Padding="10,5"/>
+                        Margin="0,15,0,0" HorizontalAlignment="Left"/>
+                <CheckBox Content="Enable desktop notifications for file events"
+                          IsChecked="{Binding FileNotificationsEnabled}"
+                          Margin="0,10,0,0" />
             </StackPanel>
 
             <TextBlock Text="Process Monitor" FontSize="18" FontWeight="SemiBold" Margin="0,0,0,10"/>
             <StackPanel Margin="0,0,0,25">
-                <TextBlock Text="Process Whitelist (processes to ignore):" FontWeight="Medium"/>
-                <ListView Height="100" Margin="0,5,0,0" IsEnabled="False"/>
-                <Grid Margin="0,10,0,0">
+                <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="Auto"/>
@@ -45,16 +46,26 @@
                     <TextBox Grid.Column="0" ui:ControlHelper.PlaceholderText="Enter process name (e.g., chrome.exe)" IsEnabled="False" VerticalContentAlignment="Center"/>
                     <Button Grid.Column="1" Content="Add" Margin="10,0,0,0" IsEnabled="False" Padding="10,5"/>
                 </Grid>
+                <TextBlock Margin="0,10,0,0" Text="Process Whitelist (processes to ignore):" FontWeight="Medium"/>
+                <ListView Height="100" Margin="0,5,0,0" IsEnabled="False"/>
+                <CheckBox Content="Enable desktop notifications for process events"
+                          IsChecked="{Binding ProcessNotificationsEnabled}"
+                          IsEnabled="False"
+                          Margin="0,10,0,0" />
             </StackPanel>
 
             <TextBlock Text="Registry Monitor" FontSize="18" FontWeight="SemiBold" Margin="0,0,0,10"/>
             <StackPanel Margin="0,0,0,25">
                 <TextBlock Text="Registry Key Path:" FontWeight="Medium"/>
                 <TextBox Margin="0,5,0,0" ui:ControlHelper.PlaceholderText="e.g., HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft" IsEnabled="False"/>
-                <Button Content="Monitor All Registries"
+                <CheckBox Content="Monitor All Registries"
                         Margin="0,10,0,0"
                         HorizontalAlignment="Left"
-                        IsEnabled="False" Padding="10,5"/>
+                        IsEnabled="False"/>
+                <CheckBox Content="Enable desktop notifications for registry events"
+                          IsChecked="{Binding RegistryNotificationsEnabled}"
+                          IsEnabled="False"
+                          Margin="0,10,0,0" />
             </StackPanel>
 
             <TextBlock Text="Application Settings" FontSize="18" FontWeight="SemiBold" Margin="0,0,0,10"/>
@@ -62,10 +73,6 @@
                 <CheckBox Content="Enable Start on System Startup"
                   IsEnabled="False"
                   HorizontalAlignment="Left"/>
-                <CheckBox Content="Allow Desktop Notifications"
-                              IsChecked="{Binding AllowNotifications}"
-                              HorizontalAlignment="Left"
-                              Margin="0,10,0,0"/>
                 <CheckBox Content="Exit to System Tray"
                               IsChecked="{Binding MinimizeToTray}"
                               HorizontalAlignment="Left"
