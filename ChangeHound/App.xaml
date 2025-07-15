@@ -2,7 +2,6 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:ChangeHound"
-             StartupUri="Views/MainView.xaml"
              xmlns:viewModels="clr-namespace:ChangeHound.ViewModels"
              xmlns:views="clr-namespace:ChangeHound.Views"
              xmlns:ui="http://schemas.modernwpf.com/2019">

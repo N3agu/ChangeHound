@@ -64,8 +64,8 @@
     <Window.DataContext>
         <viewModels:MainViewModel/>
     </Window.DataContext>
-
-    <ui:NavigationView
+    <Grid>
+        <ui:NavigationView
         x:Name="NavView"
         MenuItemsSource="{Binding NavigationItems}"
         SelectedItem="{Binding SelectedItem, Mode=TwoWay}"
@@ -74,13 +74,19 @@
         IsSettingsVisible="False"
         IsBackButtonVisible="Collapsed">
 
-        <ui:NavigationView.PaneFooter>
-            <ContentControl Content="{Binding}" ContentTemplate="{StaticResource ThemeToggleTemplate}" />
-        </ui:NavigationView.PaneFooter>
+            <ui:NavigationView.PaneFooter>
+                <ContentControl Content="{Binding}" ContentTemplate="{StaticResource ThemeToggleTemplate}" />
+            </ui:NavigationView.PaneFooter>
 
-        <ui:NavigationView.Content>
-            <ContentControl Content="{Binding CurrentViewModel}" Margin="10" />
-        </ui:NavigationView.Content>
+            <ui:NavigationView.Content>
+                <ContentControl Content="{Binding CurrentViewModel}" Margin="10" />
+            </ui:NavigationView.Content>
 
-    </ui:NavigationView>
+        </ui:NavigationView>
+
+        <Grid Background="#7F000000"
+              Visibility="{Binding IsLoading, Converter={StaticResource BooleanToVisibilityConverter}, FallbackValue=Visible}">
+            <ui:ProgressRing IsActive="True" Height="60" Width="60" />
+        </Grid>
+    </Grid>
 </Window>

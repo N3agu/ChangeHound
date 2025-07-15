@@ -10,8 +10,8 @@ using Brush = System.Windows.Media.Brush;
 namespace ChangeHound.ViewModels {
     public class ResourceMonitorViewModel : ViewModelBase {
         #region Fields
-        private readonly IResourceMonitorService _performanceService;
-        private readonly DispatcherTimer _timer;
+        private IResourceMonitorService _performanceService;
+        private DispatcherTimer _timer;
         #endregion
 
         #region Properties
@@ -25,22 +25,13 @@ namespace ChangeHound.ViewModels {
 
         #region Constructor & Lifecycle
         public ResourceMonitorViewModel(IConfigurationService configService) {
-            _performanceService = new ResourceMonitorService();
-
             // initialize charts
             CpuSeries = CreateDonutSeries(0);
             MemorySeries = CreateDonutSeries(0);
             GpuSeries = CreateDonutSeries(0);
 
-            // initialize collections
+            // initialize collection
             Disks = new ObservableCollection<DiskInfo>();
-            SystemInfo = _performanceService.GetSystemInfo();
-
-            _timer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(1.5) };
-            _timer.Tick += UpdatePerformanceData;
-            _timer.Start();
-
-            UpdatePerformanceData(null, EventArgs.Empty);
         }
 
         public void Dispose() {
@@ -50,6 +41,27 @@ namespace ChangeHound.ViewModels {
         #endregion
 
         #region Private Methods
+        private async Task InitializeAsync() {
+            _performanceService = new ResourceMonitorService();
+            await _performanceService.InitializeAsync();
+
+            // Run the slow WMI query on a background thread
+            SystemInfo = await Task.Run(() => _performanceService.GetSystemInfo());
+            OnPropertyChanged(nameof(SystemInfo));
+
+            _timer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(1.5) };
+            _timer.Tick += UpdatePerformanceData;
+            _timer.Start();
+
+            UpdatePerformanceData(null, EventArgs.Empty);
+        }
+
+        public static async Task<ResourceMonitorViewModel> CreateAsync(IConfigurationService configService) {
+            var viewModel = new ResourceMonitorViewModel(configService);
+            await viewModel.InitializeAsync();
+            return viewModel;
+        }
+
         private void UpdatePerformanceData(object? sender, EventArgs e) {
             UpdateSeries(CpuSeries, _performanceService.GetCpuUsage());
             UpdateSeries(MemorySeries, _performanceService.GetMemoryUsage());
