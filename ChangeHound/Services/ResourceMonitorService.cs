@@ -7,29 +7,15 @@ using System.Management;
 namespace ChangeHound.Services {
     public class ResourceMonitorService : IResourceMonitorService {
         #region Fields
-        private readonly PerformanceCounter _cpuCounter;
-        private readonly PerformanceCounter _ramCounter;
-        private readonly Computer _computer;
-        private readonly IHardware? _gpu;
-        private readonly IHardware? _cpu;
+        private PerformanceCounter? _cpuCounter;
+        private PerformanceCounter? _ramCounter;
+        private Computer? _computer;
+        private IHardware? _gpu;
+        private IHardware? _cpu;
         #endregion
 
         #region Constructor & Lifecycle
-        public ResourceMonitorService() {
-            _cpuCounter = new PerformanceCounter("Processor Information", "% Processor Time", "_Total");
-            _ramCounter = new PerformanceCounter("Memory", "% Committed Bytes In Use");
-
-            // Initialize LibreHardwareMonitor
-            _computer = new Computer { IsCpuEnabled = true, IsGpuEnabled = true };
-            _computer.Open();
-            _computer.Accept(new UpdateVisitor());
-
-            _gpu = _computer.Hardware.FirstOrDefault(h => h.HardwareType == HardwareType.GpuAmd || h.HardwareType == HardwareType.GpuNvidia || h.HardwareType == HardwareType.GpuIntel);
-            _cpu = _computer.Hardware.FirstOrDefault(h => h.HardwareType == HardwareType.Cpu);
-
-            // first read can be faulty
-            _cpuCounter.NextValue();
-        }
+        public ResourceMonitorService() { }
 
         public void Dispose() {
             _cpuCounter.Dispose();
@@ -39,8 +25,26 @@ namespace ChangeHound.Services {
         #endregion
 
         #region Private Methods
-        public float GetCpuUsage() => _cpuCounter.NextValue();
-        public float GetMemoryUsage() => _ramCounter.NextValue();
+        public async Task InitializeAsync() {
+            await Task.Run(() => {
+                _cpuCounter = new PerformanceCounter("Processor Information", "% Processor Time", "_Total");
+                _ramCounter = new PerformanceCounter("Memory", "% Committed Bytes In Use");
+
+                // Initialize LibreHardwareMonitor
+                _computer = new Computer { IsCpuEnabled = true, IsGpuEnabled = true };
+                _computer.Open();
+                _computer.Accept(new UpdateVisitor());
+
+                _gpu = _computer.Hardware.FirstOrDefault(h => h.HardwareType == HardwareType.GpuAmd || h.HardwareType == HardwareType.GpuNvidia || h.HardwareType == HardwareType.GpuIntel);
+                _cpu = _computer.Hardware.FirstOrDefault(h => h.HardwareType == HardwareType.Cpu);
+
+                // first read can be faulty
+                _cpuCounter.NextValue();
+            });
+        }
+
+        public float GetCpuUsage() => _cpuCounter?.NextValue() ?? 0;
+        public float GetMemoryUsage() => _ramCounter?.NextValue() ?? 0;
 
         public float GetGpuUsage() {
             _gpu?.Update();

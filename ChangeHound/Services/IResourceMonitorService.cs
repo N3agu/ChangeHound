@@ -1,5 +1,6 @@
 ﻿namespace ChangeHound.Services {
     public interface IResourceMonitorService : IDisposable {
+        Task InitializeAsync();
         float GetCpuUsage();
         float GetMemoryUsage();
         float GetGpuUsage();
