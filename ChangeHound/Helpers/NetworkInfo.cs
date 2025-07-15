@@ -1,9 +1,18 @@
 ﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Windows.Input;
+using ChangeHound.Commands;
 
 namespace ChangeHound.Helpers {
     public class NetworkInfo : INotifyPropertyChanged {
         public string AdapterName { get; }
+        public ICommand ToggleVisibilityCommand { get; }
+
+        private bool _isVisible = true;
+        public bool IsVisible {
+            get => _isVisible;
+            set => SetProperty(ref _isVisible, value);
+        }
 
         private double _uploadSpeedMbps;
         public double UploadSpeedMbps {
@@ -31,6 +40,7 @@ namespace ChangeHound.Helpers {
 
         public NetworkInfo(string adapterName, double upload, double download, double sent, double received) {
             AdapterName = adapterName;
+            ToggleVisibilityCommand = new DelegateCommand(_ => IsVisible = !IsVisible);
             Update(upload, download, sent, received);
         }
 
