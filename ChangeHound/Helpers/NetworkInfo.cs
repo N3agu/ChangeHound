@@ -5,6 +5,7 @@ using ChangeHound.Commands;
 
 namespace ChangeHound.Helpers {
     public class NetworkInfo : INotifyPropertyChanged {
+        #region Properties
         public string AdapterName { get; }
         public ICommand ToggleVisibilityCommand { get; }
 
@@ -37,12 +38,17 @@ namespace ChangeHound.Helpers {
             get => _totalReceivedGB;
             private set => SetProperty(ref _totalReceivedGB, value);
         }
+        #endregion
 
+        #region Constructor
         public NetworkInfo(string adapterName, double upload, double download, double sent, double received) {
             AdapterName = adapterName;
             ToggleVisibilityCommand = new DelegateCommand(_ => IsVisible = !IsVisible);
             Update(upload, download, sent, received);
         }
+        #endregion
+
+        #region Private Methods
 
         public void Update(NetworkInfo other) {
             Update(other.UploadSpeedMbps, other.DownloadSpeedMbps, other.TotalSentGB, other.TotalReceivedGB);
@@ -62,5 +68,6 @@ namespace ChangeHound.Helpers {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
             return true;
         }
+        #endregion
     }
 }
