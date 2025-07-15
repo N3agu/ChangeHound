@@ -1,4 +1,5 @@
 ﻿using ChangeHound.Common;
+using ChangeHound.Helpers;
 using ChangeHound.Services;
 using LiveCharts;
 using LiveCharts.Wpf;
@@ -18,9 +19,21 @@ namespace ChangeHound.ViewModels {
         public SeriesCollection CpuSeries { get; set; }
         public SeriesCollection MemorySeries { get; set; }
         public SeriesCollection GpuSeries { get; set; }
-        public float PowerUsage { get; set; }
         public ObservableCollection<DiskInfo> Disks { get; set; }
-        public SystemInfo? SystemInfo { get; set; }
+
+        private float _powerUsage;
+        public float PowerUsage {
+            get => _powerUsage;
+            private set => SetProperty(ref _powerUsage, value);
+        
+        }
+        private SystemInfo? _systemInfo;
+        public SystemInfo? SystemInfo {
+            get => _systemInfo;
+            private set => SetProperty(ref _systemInfo, value);
+        }
+
+        public ObservableCollection<NetworkInfo> Networks { get; }
         #endregion
 
         #region Constructor & Lifecycle
@@ -30,8 +43,9 @@ namespace ChangeHound.ViewModels {
             MemorySeries = CreateDonutSeries(0);
             GpuSeries = CreateDonutSeries(0);
 
-            // initialize collection
+            // initialize collections
             Disks = new ObservableCollection<DiskInfo>();
+            Networks = new ObservableCollection<NetworkInfo>();
         }
 
         public void Dispose() {
@@ -45,7 +59,6 @@ namespace ChangeHound.ViewModels {
             _performanceService = new ResourceMonitorService();
             await _performanceService.InitializeAsync();
 
-            // Run the slow WMI query on a background thread
             SystemInfo = await Task.Run(() => _performanceService.GetSystemInfo());
             OnPropertyChanged(nameof(SystemInfo));
 
@@ -57,7 +70,7 @@ namespace ChangeHound.ViewModels {
         }
 
         public static async Task<ResourceMonitorViewModel> CreateAsync(IConfigurationService configService) {
-            var viewModel = new ResourceMonitorViewModel(configService);
+            ResourceMonitorViewModel viewModel = new ResourceMonitorViewModel(configService);
             await viewModel.InitializeAsync();
             return viewModel;
         }
@@ -72,7 +85,23 @@ namespace ChangeHound.ViewModels {
 
             List<DiskInfo> currentDisks = _performanceService.GetDiskInfo();
             Disks.Clear();
-            foreach (DiskInfo disk in currentDisks) Disks.Add(disk);
+            // check the number of disks to avoid constant updates
+            if (currentDisks.Count != Disks.Count) {
+                Disks.Clear();
+                foreach (var disk in currentDisks) Disks.Add(disk);
+            }
+
+            var currentNetworks = _performanceService.GetNetworkInfo();
+
+            foreach (NetworkInfo? networkInfo in currentNetworks) {
+                NetworkInfo? existing = Networks.FirstOrDefault(n => n.AdapterName == networkInfo.AdapterName);
+                if (existing != null) {
+                    existing.Update(networkInfo);
+                }
+                else {
+                    Networks.Add(networkInfo);
+                }
+            }
         }
 
         private SeriesCollection CreateDonutSeries(float initialValue) {

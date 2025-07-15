@@ -5,7 +5,8 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
              xmlns:viewModels="clr-namespace:ChangeHound.ViewModels"
-             mc:Ignorable="d" 
+             mc:Ignorable="d"
+             xmlns:ui="http://schemas.modernwpf.com/2019"
              d:DesignHeight="800" d:DesignWidth="800">
     <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
         <StackPanel Margin="20">
@@ -89,6 +90,55 @@
                     <TextBlock Grid.Row="3" Grid.Column="1" Text="{Binding SystemInfo.TotalRamGB, StringFormat='{}{0} GB'}"/>
                 </Grid>
             </Border>
+
+            <TextBlock Text="Network Adapters" FontSize="18" FontWeight="SemiBold" Margin="0,25,0,10"/>
+            <ItemsControl ItemsSource="{Binding Networks}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Border CornerRadius="4" Padding="15" Margin="0,0,0,10">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                </Grid.RowDefinitions>
+
+                                <TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" FontWeight="Medium"
+                               Text="{Binding AdapterName, Mode=OneWay}" Margin="0,0,0,10" />
+
+                                <StackPanel Grid.Row="1" Grid.Column="0" Orientation="Horizontal" HorizontalAlignment="Center">
+                                    <ui:FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE774;" Margin="0,0,8,0" VerticalAlignment="Center" />
+                                    <TextBlock Text="{Binding DownloadSpeedMbps, StringFormat='{}{0:F2} Mbps', Mode=OneWay}" FontSize="16" />
+                                    <TextBlock Text=" Download" VerticalAlignment="Bottom" Opacity="0.8"/>
+                                </StackPanel>
+
+                                <Separator Grid.Row="1" Grid.Column="1" Margin="15,0"/>
+
+                                <StackPanel Grid.Row="1" Grid.Column="2" Orientation="Horizontal" HorizontalAlignment="Center">
+                                    <ui:FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE773;" Margin="0,0,8,0" VerticalAlignment="Center" />
+                                    <TextBlock Text="{Binding UploadSpeedMbps, StringFormat='{}{0:F2} Mbps', Mode=OneWay}" FontSize="16" />
+                                    <TextBlock Text=" Upload" VerticalAlignment="Bottom" Opacity="0.8"/>
+                                </StackPanel>
+
+                                <TextBlock Grid.Row="2" Grid.Column="0" HorizontalAlignment="Center" Margin="0,10,0,0" Opacity="0.8">
+                        <Run Text="Received:"/>
+                        <Run Text="{Binding TotalReceivedGB, StringFormat='{}{0:F2} GB', Mode=OneWay}"/>
+                                </TextBlock>
+
+                                <TextBlock Grid.Row="2" Grid.Column="2" HorizontalAlignment="Center" Margin="0,10,0,0" Opacity="0.8">
+                        <Run Text="Sent:"/>
+                        <Run Text="{Binding TotalSentGB, StringFormat='{}{0:F2} GB', Mode=OneWay}"/>
+                                </TextBlock>
+                            </Grid>
+                        </Border>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
         </StackPanel>
     </ScrollViewer>
 </UserControl>

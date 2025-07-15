@@ -1,26 +1,29 @@
-﻿using ChangeHound.Helpers;
-using LibreHardwareMonitor.Hardware;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.IO;
 using System.Management;
+using ChangeHound.Helpers;
+using LibreHardwareMonitor.Hardware;
+using Computer = LibreHardwareMonitor.Hardware.Computer;
 
 namespace ChangeHound.Services {
     public class ResourceMonitorService : IResourceMonitorService {
         #region Fields
-        private PerformanceCounter? _cpuCounter;
-        private PerformanceCounter? _ramCounter;
-        private Computer? _computer;
+        private PerformanceCounter _cpuCounter;
+        private PerformanceCounter _ramCounter;
+        private Computer _computer;
+
         private IHardware? _gpu;
         private IHardware? _cpu;
+        private List<IHardware>? _networks;
         #endregion
 
         #region Constructor & Lifecycle
         public ResourceMonitorService() { }
 
         public void Dispose() {
-            _cpuCounter.Dispose();
-            _ramCounter.Dispose();
-            _computer.Close();
+            _cpuCounter?.Dispose();
+            _ramCounter?.Dispose();
+            _computer?.Close();
         }
         #endregion
 
@@ -30,17 +33,47 @@ namespace ChangeHound.Services {
                 _cpuCounter = new PerformanceCounter("Processor Information", "% Processor Time", "_Total");
                 _ramCounter = new PerformanceCounter("Memory", "% Committed Bytes In Use");
 
-                // Initialize LibreHardwareMonitor
-                _computer = new Computer { IsCpuEnabled = true, IsGpuEnabled = true };
+                // initialize LibreHardwareMonitor
+                _computer = new Computer
+                {
+                    IsCpuEnabled = true,
+                    IsGpuEnabled = true,
+                    IsNetworkEnabled = true
+                };
                 _computer.Open();
                 _computer.Accept(new UpdateVisitor());
 
                 _gpu = _computer.Hardware.FirstOrDefault(h => h.HardwareType == HardwareType.GpuAmd || h.HardwareType == HardwareType.GpuNvidia || h.HardwareType == HardwareType.GpuIntel);
                 _cpu = _computer.Hardware.FirstOrDefault(h => h.HardwareType == HardwareType.Cpu);
+                _networks = _computer.Hardware.Where(h => h.HardwareType == HardwareType.Network).ToList();
 
                 // first read can be faulty
                 _cpuCounter.NextValue();
             });
+        }
+
+        public List<NetworkInfo> GetNetworkInfo() {
+            List<NetworkInfo>? networkInfoList = new List<NetworkInfo>();
+
+            if (_networks != null)
+            {
+                foreach (IHardware? network in _networks) {
+                    network.Update();
+
+                    ISensor? uploadSpeedSensor = network.Sensors.FirstOrDefault(s => s.SensorType == SensorType.Throughput && s.Name == "Upload Speed");
+                    ISensor? downloadSpeedSensor = network.Sensors.FirstOrDefault(s => s.SensorType == SensorType.Throughput && s.Name == "Download Speed");
+                    ISensor? totalUploadedSensor = network.Sensors.FirstOrDefault(s => s.SensorType == SensorType.Data && s.Name == "Data Uploaded");
+                    ISensor? totalDownloadedSensor = network.Sensors.FirstOrDefault(s => s.SensorType == SensorType.Data && s.Name == "Data Downloaded");
+
+                    double uploadSpeed = (uploadSpeedSensor?.Value ?? 0) * 8 / (1000 * 1000); // bps to mbps
+                    double downloadSpeed = (downloadSpeedSensor?.Value ?? 0) * 8 / (1000 * 1000); // bps to mbps
+                    double totalSent = totalUploadedSensor?.Value ?? 0; // gb
+                    double totalReceived = totalDownloadedSensor?.Value ?? 0; // gb
+
+                    networkInfoList.Add(new NetworkInfo(network.Name, uploadSpeed, downloadSpeed, totalSent, totalReceived));
+                }
+            }
+            return networkInfoList;
         }
 
         public float GetCpuUsage() => _cpuCounter?.NextValue() ?? 0;
